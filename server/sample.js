@@ -71,7 +71,7 @@ const employees = [
     employeeID: "2",
     name: "Lisa Williams",
     qualifications: "MD",
-    specialty: "Family Medicine",
+    specialty: "Pediatrics",
     facilityID: "3",
   },
   {

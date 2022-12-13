@@ -77,7 +77,7 @@ const TreatmentDetailsType = new GraphQLObjectType({
     patient: {
       type: PatientType,
       resolve(parent, args) {
-        return Patient.findById(parent.patientID)
+        return Patient.findById(parent.patientID);
       },
     },
     employee: {
@@ -97,6 +97,7 @@ const TreatmentDetailsType = new GraphQLObjectType({
   }),
 });
 
+//RootQueries
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
   fields: {
@@ -154,6 +155,16 @@ const RootQuery = new GraphQLObjectType({
     },
   },
 });
+
+//Mutation 
+const Mutation = new GraphQLObjectType({
+  name: "Mutation",
+  description: "Functions to alter data, that is add, update and delete",
+  fields: {
+    
+  }
+})
+
 
 module.exports = new GraphQLSchema({
   query: RootQuery,

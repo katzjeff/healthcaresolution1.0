@@ -19,6 +19,7 @@ const {
   GraphQLID,
   GraphQLInt,
   GraphQLList,
+  GraphQLNonNull,
 } = require("graphql");
 
 //Patient Type
@@ -100,6 +101,7 @@ const TreatmentDetailsType = new GraphQLObjectType({
 //RootQueries
 const RootQuery = new GraphQLObjectType({
   name: "RootQueryType",
+  description: "Queries used to fetch data from the database",
   fields: {
     patient: {
       type: PatientType,
@@ -156,16 +158,47 @@ const RootQuery = new GraphQLObjectType({
   },
 });
 
-//Mutation 
-const Mutation = new GraphQLObjectType({
+//Mutation
+const mutation = new GraphQLObjectType({
   name: "Mutation",
   description: "Functions to alter data, that is add, update and delete",
   fields: {
-    
-  }
-})
+    //Patient Mutations
+    //Add new patient
+    addPatient: {
+      type: PatientType,
+      args: {
+        
+        name: { type: GraphQLNonNull(GraphQLString) },
+        age: { type: GraphQLInt },
+        gender: { type: GraphQLString },
+        address: { type: GraphQLString },
+        contactDetails: { type: GraphQLString },
+      },
+      resolve(parent, args) {
+        const patient = new Patient({
+          name: args.name,
+          age: args.age,
+          gender: args.gender,
+          address: args.address,
+          contactDetails: args.contactDetails,
+        });
+        return patient.save();
+      },
+    },
 
+    //Delete patient
+    deletePatient: {
+      type: PatientType,
+      args: { patientID: { type: GraphQLNonNull(GraphQLID) } },
+      resolve(parent, args) {
+        return Patient.findByIdAndRemove(args.patientID);
+      },
+    },
+  },
+});
 
 module.exports = new GraphQLSchema({
   query: RootQuery,
+  mutation,
 });
